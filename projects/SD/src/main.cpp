@@ -1,18 +1,46 @@
-#include <Arduino.h>
+#include "FS.h"
+#include "SD.h"
+#include "SPI.h"
+#include "sd.hpp"
 
-// put function declarations here:
-int myFunction(int, int);
+void setup(){
+  Serial.begin(9600);
+  if(!SD.begin(5)){
+    Serial.println("Card Mount Failed");
+    return;
+  }
+  uint8_t cardType = SD.cardType();
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  if(cardType == CARD_NONE){
+    Serial.println("No SD card attached");
+    return;
+  }
+
+  Serial.print("SD Card Type: ");
+  if(cardType == CARD_MMC){
+    Serial.println("MMC");
+  } else if(cardType == CARD_SD){
+    Serial.println("SDSC");
+  } else if(cardType == CARD_SDHC){
+
+    Serial.println("SDHC");
+  } else {
+    Serial.println("UNKNOWN");
+  }
+
+  uint64_t cardSize = SD.cardSize() / (1024 * 1024);
+  Serial.printf("SD Card Size: %lluMB\n", cardSize);
+
+  
+ 
+  writeFile(SD, "/mydir/hello.txt", "siemano3");
+  listDir(SD, "/mydir", 0);
+  readFile(SD, "/mydir/hello.txt");
+  
+  Serial.printf("Total space: %lluMB\n", SD.totalBytes() / (1024 * 1024));
+  Serial.printf("Used space: %lluMB\n", SD.usedBytes() / (1024 * 1024));
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+void loop(){
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
