@@ -20,7 +20,7 @@ void mpu_setup() {
 }
 
 void calibrate() {
-  const int calibrationSamples = 1000;
+  const int calibrationSamples = 100;
   for (int i = 0; i < calibrationSamples; ++i) {
     int16_t ax, ay, az;
     int16_t gx, gy, gz;
@@ -55,7 +55,7 @@ void mpu_loop() {
   static const unsigned long calibrationInterval = 30000; // Kalibracja co 30 sekund
 
   if (millis() - lastCalibrationTime >= calibrationInterval) {
-    calibrate();
+    //calibrate();
     lastCalibrationTime = millis();
   }
 

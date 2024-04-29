@@ -3,7 +3,7 @@
 #include "mpu.hpp"
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   Wire.begin(23, 19);
   mpu_setup();
 }

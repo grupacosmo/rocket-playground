@@ -1,8 +1,6 @@
 #ifndef MPU_HPP
 #define MPU_HPP
 
-#include <Arduino.h>
-
 struct MPUData {
   float ax;
   float ay;
