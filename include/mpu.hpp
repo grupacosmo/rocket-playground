@@ -1,6 +1,8 @@
 #ifndef MPU_HPP
 #define MPU_HPP
 
+#include <MPU6050.h>
+
 struct MPUData {
   float ax;
   float ay;
@@ -14,6 +16,5 @@ void mpu_setup();
 void mpu_loop();
 void reset_mpu();
 void calibrate_mpu();
-void rotate_mpu(float angle);
 
 #endif
