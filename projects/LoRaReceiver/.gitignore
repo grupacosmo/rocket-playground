@@ -2,6 +2,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+!**/src/main/resources/**
+!**/src/main\resources\cosmopklora-firebase-adminsdk-gnt9r-ffb382aeb8.json
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
