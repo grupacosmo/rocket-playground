@@ -5,40 +5,10 @@
 
 void setup(){
   Serial.begin(9600);
-  if(!SD.begin(5)){
-    Serial.println("Card Mount Failed");
-    return;
-  }
-  uint8_t cardType = SD.cardType();
-
-  if(cardType == CARD_NONE){
-    Serial.println("No SD card attached");
-    return;
-  }
-
-  Serial.print("SD Card Type: ");
-  if(cardType == CARD_MMC){
-    Serial.println("MMC");
-  } else if(cardType == CARD_SD){
-    Serial.println("SDSC");
-  } else if(cardType == CARD_SDHC){
-
-    Serial.println("SDHC");
-  } else {
-    Serial.println("UNKNOWN");
-  }
-
-  uint64_t cardSize = SD.cardSize() / (1024 * 1024);
-  Serial.printf("SD Card Size: %lluMB\n", cardSize);
-
-  
- 
-  writeFile(SD, "/mydir/hello.txt", "siemano3");
-  listDir(SD, "/mydir", 0);
-  readFile(SD, "/mydir/hello.txt");
-  
-  Serial.printf("Total space: %lluMB\n", SD.totalBytes() / (1024 * 1024));
-  Serial.printf("Used space: %lluMB\n", SD.usedBytes() / (1024 * 1024));
+  sd::setup();
+  sd::writeFile(SD, "/mydir/hello.txt", "siemano4");
+  delay(1000);
+  sd::readFile(SD, "/mydir/hello.txt");
 }
 
 void loop(){
