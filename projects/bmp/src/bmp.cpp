@@ -16,7 +16,7 @@ namespace bmp {
 //wymaga ustawienia Wire.begin(SDA_PIN, SCL_PIN) wcześniej
 void begin() {
     if (!bmp_obj.begin(0x76)) {  
-        Serial.println("Nie znaleziono odpowiedniego sensora BMP280, sprawdz okablowanie!");
+        Serial.println("Viable sensor BMP280 not found, check wiring!");
         while (1);
     }
 }
@@ -47,7 +47,6 @@ void pretty_print() {
   Serial.println(" m");
   
   Serial.println();
-  delay(2000);
 }
 
 float Data::get_as_hpa() {
