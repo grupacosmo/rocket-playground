@@ -12,12 +12,14 @@ import pl.edu.pk.cosmo.rakieta.service.FireBaseService;
 import java.io.IOException;
 
 public class Main {
+
+
     public static void main(String[] args) throws IOException {
-        EspRead data = new EspRead();
-        SerialPort serialPort = data.choosePort();
         ObjectMapper objectMapper = new ObjectMapper();
         FireBaseService fireBaseService = new FireBaseService();
         FirebaseDatabase database = fireBaseService.getDb();
+        EspRead data = new EspRead();
+        SerialPort serialPort = data.choosePort();
         DatabaseReference ref = database.getReference("LoRa");
         while (true) {
             SensorPacket sensorPacket = data.readdata(serialPort);
@@ -31,7 +33,7 @@ public class Main {
                     }
                 });
             } catch (Exception e) {
-                e.getMessage();
+                e.printStackTrace();
             } //ToDo napraw, tylko jak ejst w pętli while to się zapisuje
         }
     }
