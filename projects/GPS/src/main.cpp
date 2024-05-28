@@ -8,18 +8,16 @@ HardwareSerial mySerial(1);
 
 TinyGPSPlus gps;
 
-struct GPSParams
+struct Location
 {
   double latitude;
   double longitude;
   String time;
 };
 
-GPSParams decode();
-
 String fetchLocation();
 
-void displayInfo();
+Location parseLocation();
 
 void setup()
 {
@@ -37,8 +35,7 @@ void loop()
   {
     if (gps.encode(*dataPtr++))
     {
-      displayInfo();
-      GPSParams params = decode();
+      Location params = parseLocation();
       Serial.print("Latitude: ");
       Serial.print(params.latitude, 6);
       Serial.print(" Longitude: ");
@@ -50,9 +47,20 @@ void loop()
   delay(3000);
 }
 
-GPSParams decode()
+String fetchLocation()
 {
-  GPSParams newParams;
+  String incomingData = "";
+  while (mySerial.available())
+  {
+    char incomingByte = mySerial.read();
+    incomingData += incomingByte;
+  }
+  return incomingData;
+}
+
+Location parseLocation()
+{
+  Location newParams;
 
   if (gps.location.isValid())
   {
@@ -97,71 +105,4 @@ GPSParams decode()
   }
 
   return newParams;
-}
-
-void displayInfo()
-{
-  Serial.print(F("Location: "));
-  if (gps.location.isValid())
-  {
-    Serial.print(gps.location.lat(), 6);
-    Serial.print(F(","));
-    Serial.print(gps.location.lng(), 6);
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
-
-  Serial.print(F("  Date/Time: "));
-  if (gps.date.isValid())
-  {
-    Serial.print(gps.date.month());
-    Serial.print(F("/"));
-    Serial.print(gps.date.day());
-    Serial.print(F("/"));
-    Serial.print(gps.date.year());
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
-
-  Serial.print(F(" "));
-  if (gps.time.isValid())
-  {
-    if (gps.time.hour() < 10)
-      Serial.print(F("0"));
-    Serial.print(gps.time.hour());
-    Serial.print(F(":"));
-    if (gps.time.minute() < 10)
-      Serial.print(F("0"));
-    Serial.print(gps.time.minute());
-    Serial.print(F(":"));
-    if (gps.time.second() < 10)
-      Serial.print(F("0"));
-    Serial.print(gps.time.second());
-    Serial.print(F("."));
-    if (gps.time.centisecond() < 10)
-      Serial.print(F("0"));
-    Serial.print(gps.time.centisecond());
-    Serial.print(F(" UTC "));
-  }
-  else
-  {
-    Serial.print(F("INVALID"));
-  }
-
-  Serial.println();
-}
-
-String fetchLocation()
-{
-  String incomingData = "";
-  while (mySerial.available())
-  {
-    char incomingByte = mySerial.read();
-    incomingData += incomingByte;
-  }
-  return incomingData;
 }
