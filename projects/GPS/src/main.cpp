@@ -15,94 +15,97 @@ struct Location
   String time;
 };
 
-String fetchLocation();
+void fetchLocation();
 
 Location parseLocation();
+
+void printLocation(Location location);
 
 void setup()
 {
   Serial.begin(115200);
   mySerial.begin(9600, SERIAL_8N1, GPS_TX, GPS_RX);
-  Serial.println("GPS Serial initialized");
 }
 
 void loop()
 {
-  String incomingData = fetchLocation();
-  Serial.println(incomingData);
-  const char *dataPtr = incomingData.c_str();
-  while (*dataPtr)
-  {
-    if (gps.encode(*dataPtr++))
-    {
-      Location params = parseLocation();
-      Serial.print("Latitude: ");
-      Serial.print(params.latitude, 6);
-      Serial.print(" Longitude: ");
-      Serial.print(params.longitude, 6);
-      Serial.print(" Time: ");
-      Serial.println(params.time);
-    }
-  }
+  fetchLocation();
+  Location params = parseLocation();
+  printLocation(params);
+
   delay(3000);
 }
 
-String fetchLocation()
+void fetchLocation()
 {
-  String incomingData = "";
+  String locationData = "";
   while (mySerial.available())
   {
     char incomingByte = mySerial.read();
-    incomingData += incomingByte;
+    locationData += incomingByte;
   }
-  return incomingData;
+  const char *locationPtr = locationData.c_str();
+  while (*locationPtr)
+  {
+    gps.encode(*locationPtr++);
+  }
 }
 
 Location parseLocation()
 {
-  Location newParams;
+  Location newLocation;
 
   if (gps.location.isValid())
   {
-    newParams.latitude = gps.location.lat();
-    newParams.longitude = gps.location.lng();
+    newLocation.latitude = gps.location.lat();
+    newLocation.longitude = gps.location.lng();
   }
   else
   {
-    newParams.latitude = -1;
-    newParams.longitude = -1;
+    newLocation.latitude = -1;
+    newLocation.longitude = -1;
   }
 
   if (gps.time.isValid())
   {
-    newParams.time = "";
+    newLocation.time = "";
     uint8_t hour = gps.time.hour();
     uint8_t minute = gps.time.minute();
     uint8_t second = gps.time.second();
     uint8_t centisecond = gps.time.centisecond();
 
     if (hour < 10)
-      newParams.time += "0";
-    newParams.time += String(hour) + ":";
+      newLocation.time += "0";
+    newLocation.time += String(hour) + ":";
 
     if (minute < 10)
-      newParams.time += "0";
-    newParams.time += String(minute) + ":";
+      newLocation.time += "0";
+    newLocation.time += String(minute) + ":";
 
     if (second < 10)
-      newParams.time += "0";
-    newParams.time += String(second) + ".";
+      newLocation.time += "0";
+    newLocation.time += String(second) + ".";
 
     if (centisecond < 10)
-      newParams.time += "0";
-    newParams.time += String(centisecond);
+      newLocation.time += "0";
+    newLocation.time += String(centisecond);
 
-    newParams.time += " UTC";
+    newLocation.time += " UTC";
   }
   else
   {
-    newParams.time = "INVALID";
+    newLocation.time = "INVALID";
   }
 
-  return newParams;
+  return newLocation;
+}
+
+void printLocation(Location location)
+{
+  Serial.print("Latitude: ");
+  Serial.print(location.latitude, 6);
+  Serial.print(" Longitude: ");
+  Serial.print(location.longitude, 6);
+  Serial.print(" Time: ");
+  Serial.println(location.time);
 }
