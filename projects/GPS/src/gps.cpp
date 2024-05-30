@@ -19,16 +19,10 @@ namespace gps
 
   void fetchLocation()
   {
-    String locationData = "";
     while (mySerial.available())
     {
       char incomingByte = mySerial.read();
-      locationData += incomingByte;
-    }
-    const char *locationPtr = locationData.c_str();
-    while (*locationPtr)
-    {
-      GPSEncoder.encode(*locationPtr++);
+      GPSEncoder.encode(incomingByte);
     }
   }
 
