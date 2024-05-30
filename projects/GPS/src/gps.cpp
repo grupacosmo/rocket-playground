@@ -5,7 +5,7 @@
 #define GPS_TX 16
 #define GPS_RX 17
 
-HardwareSerial mySerial(1);
+HardwareSerial UART(1);
 
 TinyGPSPlus GPSEncoder;
 
@@ -14,14 +14,14 @@ namespace gps
 
   void begin()
   {
-    mySerial.begin(9600, SERIAL_8N1, GPS_TX, GPS_RX);
+    UART.begin(9600, SERIAL_8N1, GPS_TX, GPS_RX);
   }
 
   void fetchLocation()
   {
-    while (mySerial.available())
+    while (UART.available())
     {
-      char incomingByte = mySerial.read();
+      char incomingByte = UART.read();
       GPSEncoder.encode(incomingByte);
     }
   }
