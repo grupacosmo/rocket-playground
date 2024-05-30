@@ -4,6 +4,7 @@
 void setup()
 {
   Serial.begin(115200);
+  gps::begin();
 }
 
 void loop()
