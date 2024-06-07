@@ -4,8 +4,30 @@ async function fetchData() {
   return JSON.parse(await (await fetch("/get")).json());
 }
 
+const defaultData = {
+  gps: {
+    latitude: 55.7506,
+    longitude: 37.6175,
+  },
+};
+
+function cloneObject(object) {
+  return JSON.parse(JSON.stringify(object));
+}
+
+async function setData() {
+  try {
+    data = await fetchData();
+    if (Object.keys(data).length === 0) {
+      data = cloneObject(defaultData);
+    }
+  } catch {
+    data = cloneObject(defaultData);
+  }
+}
+
 async function init() {
-  data = await fetchData();
+  await setData();
 
   const map = L.map("map").setView([data.gps.latitude, data.gps.longitude], 13);
 
@@ -23,7 +45,7 @@ async function init() {
   }
 
   setInterval(async () => {
-    data = await fetchData();
+    await setData();
     map.flyTo([data.gps.latitude, data.gps.longitude], 8);
     setMarkerLocation(data.gps.latitude, data.gps.longitude);
   }, 1500);
