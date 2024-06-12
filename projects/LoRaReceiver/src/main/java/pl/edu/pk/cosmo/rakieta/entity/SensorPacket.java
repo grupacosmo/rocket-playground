@@ -1,5 +1,8 @@
 package pl.edu.pk.cosmo.rakieta.entity;
 
+import lombok.Setter;
+
+@Setter
 public class SensorPacket {
     public long time;
     public SensorPacketBME bme;
