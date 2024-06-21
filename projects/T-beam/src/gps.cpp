@@ -20,6 +20,7 @@ void gps_loop(void* pvParameters) {
     } else
       Serial.println("------------");
     vTaskDelay(pdMS_TO_TICKS(900));
+
   }
 }
 
