@@ -14,9 +14,21 @@
     ></script>
     <title>xd</title>
     <link rel="stylesheet" href="/css/index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <div id="map"></div>
+    <div class="flex flex-col">
+      <div id="map"></div>
+      <div class="flex flex-row charts">
+        <div class="chart"><canvas class="chart" id="temp-chart"></canvas></div>
+        <div class="chart">
+          <canvas class="chart" id="pressure-chart"></canvas>
+        </div>
+        <div class="chart">
+          <canvas class="chart" id="altitude-chart"></canvas>
+        </div>
+      </div>
+    </div>
     <script src="/js/index.js"></script>
   </body>
 </html>
