@@ -16,10 +16,10 @@ void setup() {
   gps::init();
   bmp::init();
 
-  // xTaskCreate(gps::gps_loop, "gps", 10000, NULL, 1, NULL);
-  xTaskCreate(led::blink_task, "blink", 10000, NULL, 1, NULL);
-  xTaskCreate(bmp::get_bmp, "bmp", 10000, NULL, 1, NULL);
-  xTaskCreate(bmp::print_data, "bmp printing", 10000, NULL, 1, NULL);
+  // xTaskCreate(gps::gps_loop, "gps", DEFAULT_TASK_SIZE, NULL, 1, NULL);
+  xTaskCreate(led::blink_task, "blink", DEFAULT_TASK_SIZE, NULL, 1, NULL);
+  xTaskCreate(bmp::get_bmp, "bmp", DEFAULT_TASK_SIZE, NULL, 1, NULL);
+  xTaskCreate(bmp::print_data, "bmp print", DEFAULT_TASK_SIZE, NULL, 1, NULL);
 
   memory::print_data();
   memory::config = memory::Config{222, 456.78, "Hello, EEPROM2!"};
