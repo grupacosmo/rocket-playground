@@ -11,7 +11,6 @@ void parser(void* pvParameters) {
     vTaskDelay(pdMS_TO_TICKS(500));
   }
 }
-
 void setup() {
   Serial.begin(115200);
   Serial.println("--- Starting the rocket... ---");
@@ -24,6 +23,7 @@ void setup() {
   bmp::init();
   xTaskCreate(bmp::get_bme, "bmp", 10000, NULL, 1, NULL);
   xTaskCreate(parser, "parser", 10000, NULL, 1, NULL);
+  xTaskCreate(gps::gps_loop, "gps", 10000, NULL, 1, NULL);
 }
 
 void loop() {}
