@@ -1,21 +1,21 @@
 #include "bmp.h"
 
-// korzystanie z Adafruit BMP280 Library by Adafruit
 #include <Adafruit_BMP280.h>
 #include <Adafruit_Sensor.h>
 
-// ciśnienie powietrza na poziomie morza w hPa, altitude
-// 1013.25 jest ogólną średnią
-// 1019.91 jest wartością lokalną dla Krakowa w momencie pisania tego
+// 1019.91 is avg Pressure in Cracow
 #define SEALEVELPRESSURE_HPA (1019.91)
+#define CHIP_BME 0x60
+#define CHIP_BMP 0x58
+#define CHIP_ADDR 0x76
 
 namespace bmp {
 
 Adafruit_BMP280 bmp_obj;
 
-// wymaga ustawienia Wire.begin(SDA_PIN, SCL_PIN) wcześniej
+// Requires Wire.begin(SDA_PIN, SCL_PIN)
 void init() {
-  if (!bmp_obj.begin(0x76)) {
+  if (!bmp_obj.begin(CHIP_ADDR, CHIP_BME)) {
     Serial.println("Viable sensor BMP280 not found, check wiring!");
     while (1);
   }
@@ -30,17 +30,13 @@ void get_bme(void* pvParameters) {
 
 Data measurements() {
   Data check;
-  // temperatura w Celsjuszach
   check.temperature = bmp_obj.readTemperature();
-  // Ciśnienie w paskalach
   check.pressure = bmp_obj.readPressure();
-  // przybliżona wysokość nad poziomem morza w metrach
   check.altitude = bmp_obj.readAltitude(SEALEVELPRESSURE_HPA);
   return check;
 };
 
-void pretty_print() {
-  Data exp = measurements();
+void pretty_print(Data exp) {
   Serial.print("Temperature = ");
   Serial.print(exp.temperature);
   Serial.println(" *C");

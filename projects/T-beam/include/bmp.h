@@ -14,5 +14,5 @@ inline Data global_bmp;
 
 void get_bme(void* pvParameters);
 Data measurements();
-void pretty_print();
+void pretty_print(Data);
 }  // namespace bmp
