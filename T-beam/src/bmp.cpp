@@ -29,7 +29,7 @@ Data measurements() {
   return check;
 };
 
-void get_bme(void* pvParameters) {
+void get_bmp(void* pvParameters) {
   for (;;) {
     data = measurements();
     vTaskDelay(pdMS_TO_TICKS(500));

@@ -12,7 +12,7 @@ struct Data {
 
 inline Data data;
 
-void get_bme(void* pvParameters);
+void get_bmp(void* pvParameters);
 void print_data(void* pvParameters);
 Data measurements();
 void pretty_print(Data);
