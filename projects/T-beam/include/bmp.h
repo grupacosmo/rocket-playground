@@ -10,9 +10,10 @@ struct Data {
   float get_as_hpa();
 };
 
-inline Data global_bmp;
+inline Data data;
 
 void get_bme(void* pvParameters);
+void print_data(void* pvParameters);
 Data measurements();
 void pretty_print(Data);
 }  // namespace bmp

@@ -21,13 +21,6 @@ void init() {
   }
 }
 
-void get_bme(void* pvParameters) {
-  for (;;) {
-    global_bmp = measurements();
-    vTaskDelay(pdMS_TO_TICKS(500));
-  }
-}
-
 Data measurements() {
   Data check;
   check.temperature = bmp_obj.readTemperature();
@@ -36,17 +29,30 @@ Data measurements() {
   return check;
 };
 
-void pretty_print(Data exp) {
+void get_bme(void* pvParameters) {
+  for (;;) {
+    data = measurements();
+    vTaskDelay(pdMS_TO_TICKS(500));
+  }
+}
+void print_data(void* pvParameters) {
+  for (;;) {
+    pretty_print(data);
+    vTaskDelay(pdMS_TO_TICKS(500));
+  }
+}
+
+void pretty_print(Data data) {
   Serial.print("Temperature = ");
-  Serial.print(exp.temperature);
+  Serial.print(data.temperature);
   Serial.println(" *C");
 
   Serial.print("Pressure = ");
-  Serial.print(exp.get_as_hpa());
+  Serial.print(data.get_as_hpa());
   Serial.println(" hPa");
 
   Serial.print("Approx. Altitude = ");
-  Serial.print(exp.altitude);
+  Serial.print(data.altitude);
   Serial.println(" m");
 
   Serial.println();
