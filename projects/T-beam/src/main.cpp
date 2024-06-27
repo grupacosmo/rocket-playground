@@ -1,5 +1,7 @@
 #include <Arduino.h>
+#include <Wire.h>
 
+#include "bmp.h"
 #include "gps.h"
 #include "led.h"
 
@@ -20,13 +22,26 @@ void log(void *pvParameters) {
   }
 }
 
+void parser(void* pvParameters) {
+  for (;;) {
+    Serial.println(bmp::global_bmp.altitude);
+    vTaskDelay(pdMS_TO_TICKS(500));
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   Serial.println("--- Starting the rocket... ---");
   gps::init();
   xTaskCreate(led::blink_task, "blink", 10000, NULL, 1, NULL);
+
   xTaskCreate(gps::gps_task, "gps", 10000, NULL, 1, NULL);
   xTaskCreate(log, "log", 10000, NULL, 1, NULL);
+  // xTaskCreate(gps::gps_loop, "gps", 10000, NULL, 1, NULL);
+
+  // bmp::init();
+  // xTaskCreate(bmp::get_bme, "bmp", 10000, NULL, 1, NULL);
+  xTaskCreate(parser, "parser", 10000, NULL, 1, NULL);
 }
 
 void loop() {}
