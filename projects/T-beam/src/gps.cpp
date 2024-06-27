@@ -1,11 +1,14 @@
 #include "gps.h"
 #include "TinyGPS++.h"
+#include <cstdint>
 
-namespace {
 TinyGPSPlus tiny_gps;
 gps::Data gps_data;
 bool data_available = false;
-} // namespace
+
+uint8_t const GPS_SERIAL_NUM = 1;
+uint8_t const GPS_RX_PIN = 34;
+uint8_t const GPS_TX_PIN = 12;
 
 namespace gps {
 HardwareSerial GPSSerial(GPS_SERIAL_NUM);

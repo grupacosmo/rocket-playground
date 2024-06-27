@@ -3,6 +3,9 @@
 #include "gps.h"
 #include "led.h"
 
+/// Log data from sensors
+/// For now it only logs gps data to console, eventually
+/// it should write the data from all components to a disk
 void log(void *pvParameters) {
   for (;;) {
     if (!gps::data_is_available()) {
