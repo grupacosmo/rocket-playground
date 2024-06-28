@@ -11,8 +11,8 @@ import java.io.*;
 public class EspRead implements Closeable {
     public static final int LORA_BOUND_RATE = 9600;
     private SerialPort serialPort;
-    private BufferedReader serialInput;
-    private OutputStreamWriter serialOutput;
+    public BufferedReader serialInput;
+    public OutputStreamWriter serialOutput;
     private CsvMapper csvMapper;
     private CsvSchema schema;
     public EspRead() {
@@ -104,6 +104,9 @@ public class EspRead implements Closeable {
 
     public SensorPacket readdata() throws IOException {
         String line = serialInput.readLine();
+        if(line == null){
+            return null;
+        }
         System.out.println("READ: " + line);
         if(line.startsWith("+TEST: RX")) {
             String parsedData = parseRXLine(line);
@@ -111,35 +114,7 @@ public class EspRead implements Closeable {
             parsedData.indexOf("time");
             return readAsData(parsedData);
         }
-        else {
-            String[] fragments = line.split(" ");
-            float len = Float.NaN;
-            float rssi = Float.NaN;
-            float rns = Float.NaN;
-            for(String fr : fragments) {
-                String[] parts  = fr.split(":");
-                if(parts.length == 2) {
-                    if(parts[0].equals("LEN")) {
-                        len = Integer.parseInt(parts[1]);
-                    }
-                    if(parts[0].equals("RSSI")) {
-                        rssi = Integer.parseInt(parts[1]);
-                    }
-                    if(parts[0].equals("RNS")) {
-                        rns = Integer.parseInt(parts[1]);
-                    }
-                }
-            }
-            System.out.println("");
-            System.out.println(len);
-            System.out.println(rssi);
-            System.out.println(rns);
-        }
         return null;
-
-//        InputStream stream = new ByteArrayInputStream(line.getBytes());
-//        DataInputStream boxed = new DataInputStream(stream);
-//        return readAsData(boxed);
     }
 
     private static String parseRXLine(String line) {

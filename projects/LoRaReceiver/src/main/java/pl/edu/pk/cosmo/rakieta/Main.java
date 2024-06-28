@@ -36,7 +36,7 @@ public class Main {
         while (true) {
             try {
                 readAndSend(data, objectMapper, ref);
-//                writeToFile(data, objectMapper);
+                writeToFile(data, objectMapper);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -55,7 +55,7 @@ public class Main {
         });
     }
     private static void writeToFile(EspRead data, ObjectMapper objectMapper) throws IOException {
-        String saveFile = objectMapper.writeValueAsString(data);
+        String saveFile = objectMapper.writeValueAsString(data.readdata());
         String fileName = java.time.LocalDate.now().toString() + ".txt";
         File file = new File(fileName);
         if (file.exists() && !file.isDirectory()) {
